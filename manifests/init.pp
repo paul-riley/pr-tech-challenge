@@ -44,7 +44,7 @@ class prtechchallenge(
     ensure => installed
   }
 
-  service {'iptables':
+  service { 'firewalld':
     ensure => stopped
   }
 
