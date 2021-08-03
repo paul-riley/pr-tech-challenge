@@ -29,7 +29,7 @@ This module installs and configures the Jenkins to run on a specified port.
 ### Setup Requirements
 
 The only requirement is an Enterprise Linux Operating System, with access
-to the Internet
+to the Internet.
 
 ### Beginning with prtechchallenge
 
@@ -52,4 +52,4 @@ configuration ordering, and ensuring a service is running.
 ## Development
 
 This module is released using the Apache 2.0 license. All work is originally
-developed by Paul Riley
+developed by Paul Riley.
