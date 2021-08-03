@@ -13,7 +13,7 @@ class prtechchallenge {
   #Step 1. Put the repos in place & import key.
   file { '/etc/yum.repos.d/jenkins.repo':
     ensure  => present,
-    content => file('prtechchallenge/jenkins.pp'),
+    content => file('prtechchallenge/jenkins.repo'),
     owner   => root,
     group   => root,
     notify  => Exec['get_repo_key']
