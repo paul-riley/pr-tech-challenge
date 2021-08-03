@@ -8,6 +8,7 @@
 #   include prtechchallenge
 class prtechchallenge(
   Array[String] $required_pkgs = ['java-11-openjdk-devel', 'jenkins'],
+  String $selinux_status = 'disabled',
   String $jenkins_port = '8000'
 ) {
 
@@ -37,6 +38,14 @@ class prtechchallenge(
     command     => 'sudo setenforce 0',
     refreshonly => true
   }
+  file {'/etc/selinux/config':
+    ensure  => file,
+    content => epp('prtechchallenge/selinux_config.epp'),
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+  }
+
   service { 'firewalld':
     ensure => stopped
   }
