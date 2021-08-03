@@ -34,14 +34,14 @@ to the Internet.
 ### Beginning with prtechchallenge
 
 Clone the module into your repository, then add the module to a Puppetfile to
-ensure that Codemanager/ Hiera imports the module. The moduel can be modified
+ensure that Code Manager/ Hiera imports the module. The module can be modified
 to use a different port, or allow for Hiera/Code Manager to override port 8000.
 
 ## Usage
 
 This module allows for the installation and reconfiguration of Jenkins.
 Currently, this modules sets up the repositories, installs the Openjdk 11
-package, installs Jenkins, reconfigures the /etc/syscconfig/jenkins file for
+package, installs Jenkins, reconfigures the /etc/sysconfig/jenkins file for
 a port, then ensures Jenkins is running.
 
 ## Limitations
