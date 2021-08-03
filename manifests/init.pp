@@ -49,7 +49,7 @@ class prtechchallenge(
     before => File[$jenkins_config_file]
   }
 
-  #Step 3. Reconfigure /etc/sysconfig/jenkins. Normally would use file_line
+  #Step 3. Reconfigure /etc/sysconfig/jenkins. Normally would use file_line from std_lib
   file { $jenkins_config_file:
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
