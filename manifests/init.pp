@@ -9,6 +9,7 @@ class prtechchallenge(
   String $repo_content = 'prtechchallenge/jenkins.repo',
   String $repo_key = 'https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
   Array[String] $required_pkgs = ['java-11-openjdk-devel', 'jenkins'],
+  String $jenkins_config_file = '/etc/sysconfig/jenkins',
   String $jenkins_port = '8000'
 ) {
 
@@ -44,11 +45,12 @@ class prtechchallenge(
 
   #Step 2. Install the packages
   package { $required_pkgs:
-    ensure => installed
+    ensure => installed,
+    before => File[$jenkins_config_file]
   }
 
   #Step 3. Reconfigure /etc/sysconfig/jenkins. Normally would use file_line
-  file { '/etc/sysconfig/jenkins':
+  file { $jenkins_config_file:
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
     owner   => root,
