@@ -9,7 +9,7 @@ class prtechchallenge(
   String $repo_content = 'prtechchallenge/jenkins.repo',
   String $repo_key = 'https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
   Array[String] $required_pkgs = ['java-11-openjdk-devel', 'jenkins'],
-  Integer $jenkins_port = 8000
+  String $jenkins_port = '8000'
 ) {
 
   #Step 0: Limit this to RHEL Family of stuff
@@ -36,18 +36,18 @@ class prtechchallenge(
   file { '/etc/default/jenkins':
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
-    notify  => service['jenkins']
+    notify  => Service['jenkins']
   }
 
   #Step 3. Install the packages
   package { $required_pkgs:
-    ensure => installed,
-    notify => service['jenkins']
+    ensure => installed
   }
 
   #Step 4. Make sure the service is started after reconfiguring
   service { 'jenkins':
-    ensure => running
+    ensure  => running,
+    require => Package[$required_pkgs[-1]]
   }
 
 }
