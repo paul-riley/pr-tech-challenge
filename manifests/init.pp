@@ -9,7 +9,7 @@ class prtechchallenge(
   String $repo_content = 'prtechchallenge/jenkins.repo',
   String $repo_key = 'https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
   Array[String] $required_pkgs = ['java-11-openjdk-devel', 'jenkins'],
-  String $jenkins_port = '8080'
+  String $jenkins_port = '8000'
 ) {
 
   #Step 0: Limit this to RHEL Family of stuff
