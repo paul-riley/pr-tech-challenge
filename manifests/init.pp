@@ -50,5 +50,4 @@ class prtechchallenge(
     ensure => running
   }
 
-
 }
