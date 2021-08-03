@@ -21,7 +21,7 @@ class prtechchallenge {
 
   exec {'get_repo_key':
     path        => '/usr/bin',
-    command     => 'sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key',
+    command     => 'sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
     refreshonly => true
   }
 
