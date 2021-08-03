@@ -13,7 +13,7 @@ class prtechchallenge(
 
   #Step 0: Limit this to RHEL Family of stuff
   if $::facts['os']['family'] != 'RedHat' {
-    err('Installer Failed: Non-Enterprise Linux OS !Centos|!Scientific|!Rocky|!RHEL')
+    fail('Installer Failed: Non-Enterprise Linux OS !Centos|!Scientific|!Rocky|!RHEL')
   }
 
   #Step 1. Put the repos in place & import key, set other config stuff
