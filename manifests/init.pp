@@ -1,15 +1,13 @@
 # @summary A short summary of the purpose of this class
 #
-# A description of what this class does
+# This installs jenkins and configures it to use a custom port.
+#  It has a side effect on turning off selinux and firewalld.
+#  Not recommended for production. Scoped to EL family only.
 #
 # @example
 #   include prtechchallenge
 class prtechchallenge(
-  String $repo_file = '/etc/yum.repos.d/jenkins.repo',
-  String $repo_content = 'prtechchallenge/jenkins.repo',
-  String $repo_key = 'https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
   Array[String] $required_pkgs = ['java-11-openjdk-devel', 'jenkins'],
-  String $jenkins_config_file = '/etc/sysconfig/jenkins',
   String $jenkins_port = '8000'
 ) {
 
@@ -19,9 +17,9 @@ class prtechchallenge(
   }
 
   #Step 1. Put the repos in place & import key, set other config stuff
-  file { $repo_file:
+  file { '/etc/yum.repos.d/jenkins.repo':
     ensure  => present,
-    content => file($repo_content),
+    content => file('prtechchallenge/jenkins.repo'),
     owner   => root,
     group   => root,
     notify  => Exec['get_repo_key']
@@ -29,12 +27,12 @@ class prtechchallenge(
 
   exec { 'get_repo_key':
     path        => '/usr/bin',
-    command     => "sudo rpm --import ${repo_key}",
+    command     => 'sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key',
     refreshonly => true
   }
 
   #This is not awesome, I would use the selinux provider and firewalld
-  exec {'turn_off_selinux':
+  exec { 'turn_off_selinux':
     path        => '/usr/bin',
     command     => 'sudo setenforce 0',
     refreshonly => true
@@ -46,11 +44,11 @@ class prtechchallenge(
   #Step 2. Install the packages
   package { $required_pkgs:
     ensure => installed,
-    before => File[$jenkins_config_file]
+    before => File['/etc/sysconfig/jenkins']
   }
 
   #Step 3. Reconfigure /etc/sysconfig/jenkins. Normally would use file_line from std_lib
-  file { $jenkins_config_file:
+  file { '/etc/sysconfig/jenkins':
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
     owner   => root,
