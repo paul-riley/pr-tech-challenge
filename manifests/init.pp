@@ -44,6 +44,10 @@ class prtechchallenge(
     ensure => installed
   }
 
+  service {'iptables':
+    ensure => stopped
+  }
+
   #Step 4. Make sure the service is started after reconfiguring
   service { 'jenkins':
     ensure  => running,
