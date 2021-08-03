@@ -17,7 +17,7 @@ class prtechchallenge(
     err('Installer Failed: Non-Enterprise Linux OS !Centos|!Scientific|!Rocky|!RHEL')
   }
 
-  #Step 1. Put the repos in place & import key.
+  #Step 1. Put the repos in place & import key, set other config stuff
   file { $repo_file:
     ensure  => present,
     content => file($repo_content),
@@ -32,10 +32,23 @@ class prtechchallenge(
     refreshonly => true
   }
 
+  #This is not awesome, I would use the selinux provider and firewalld
+  exec {'turn_off_selinux':
+    path        => '/usr/bin',
+    command     => 'sudo setenforce 0',
+    refreshonly => true
+  }
+  service { 'firewalld':
+    ensure => stopped
+  }
+
   #Step 2. Configure the custom stuff port 8000
-  file { '/etc/default/jenkins':
+  file { '/etc/sysconfig/jenkins':
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
+    owner   => root,
+    group   => root,
+    mode    => '0600',
     notify  => Service['jenkins']
   }
 
@@ -44,13 +57,10 @@ class prtechchallenge(
     ensure => installed
   }
 
-  service { 'firewalld':
-    ensure => stopped
-  }
-
   #Step 4. Make sure the service is started after reconfiguring
   service { 'jenkins':
     ensure  => running,
+    before  => Exec['turn_off_selinux'],
     require => Package[$required_pkgs[-1]]
   }
 
