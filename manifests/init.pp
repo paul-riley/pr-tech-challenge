@@ -42,7 +42,12 @@ class prtechchallenge(
     ensure => stopped
   }
 
-  #Step 2. Configure the custom stuff port 8000
+  #Step 2. Install the packages
+  package { $required_pkgs:
+    ensure => installed
+  }
+
+  #Step 3. Reconfigure /etc/sysconfig/jenkins. Normally would use file_line
   file { '/etc/sysconfig/jenkins':
     ensure  => file,
     content => epp('prtechchallenge/jenkins_port.epp'),
@@ -50,11 +55,6 @@ class prtechchallenge(
     group   => root,
     mode    => '0600',
     notify  => Service['jenkins']
-  }
-
-  #Step 3. Install the packages
-  package { $required_pkgs:
-    ensure => installed
   }
 
   #Step 4. Make sure the service is started after reconfiguring
