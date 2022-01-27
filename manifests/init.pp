@@ -36,7 +36,6 @@ class prtechchallenge(
   exec { 'turn_off_selinux':
     path        => '/usr/bin',
     command     => 'sudo setenforce 0',
-    before      => Service['jenkins'],
     refreshonly => true
   }
   file {'/etc/selinux/config':
@@ -44,11 +43,12 @@ class prtechchallenge(
     content => epp('prtechchallenge/selinux_config.epp'),
     owner   => root,
     group   => root,
-    mode    => '0644',
+    mode    => '0644'
   }
 
   service { 'firewalld':
-    ensure => stopped
+    ensure => stopped,
+    before => Service['jenkins']
   }
 
   #Step 2. Install the packages
