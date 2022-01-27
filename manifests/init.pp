@@ -36,6 +36,7 @@ class prtechchallenge(
   exec { 'turn_off_selinux':
     path        => '/usr/bin',
     command     => 'sudo setenforce 0',
+    before      => Service['jenkins'],
     refreshonly => true
   }
   file {'/etc/selinux/config':
@@ -69,7 +70,6 @@ class prtechchallenge(
   #Step 4. Make sure the service is started after reconfiguring
   service { 'jenkins':
     ensure  => running,
-    before  => Exec['turn_off_selinux'],
     require => Package[$required_pkgs[-1]]
   }
 
